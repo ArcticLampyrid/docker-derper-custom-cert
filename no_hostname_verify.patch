@@ -1,0 +1,38 @@
+diff --git a/cmd/derper/cert.go b/cmd/derper/cert.go
+index db84aa515..377bca4f6 100644
+--- a/cmd/derper/cert.go
++++ b/cmd/derper/cert.go
+@@ -5,7 +5,6 @@
+ 
+ import (
+ 	"crypto/tls"
+-	"crypto/x509"
+ 	"errors"
+ 	"fmt"
+ 	"net/http"
+@@ -66,14 +65,6 @@ func NewManualCertManager(certdir, hostname string) (certProvider, error) {
+ 	if err != nil {
+ 		return nil, fmt.Errorf("can not load x509 key pair for hostname %q: %w", keyname, err)
+ 	}
+-	// ensure hostname matches with the certificate
+-	x509Cert, err := x509.ParseCertificate(cert.Certificate[0])
+-	if err != nil {
+-		return nil, fmt.Errorf("can not load cert: %w", err)
+-	}
+-	if err := x509Cert.VerifyHostname(hostname); err != nil {
+-		return nil, fmt.Errorf("cert invalid for hostname %q: %w", hostname, err)
+-	}
+ 	return &manualCertManager{cert: &cert, hostname: hostname}, nil
+ }
+ 
+@@ -88,10 +79,6 @@ func (m *manualCertManager) TLSConfig() *tls.Config {
+ }
+ 
+ func (m *manualCertManager) getCertificate(hi *tls.ClientHelloInfo) (*tls.Certificate, error) {
+-	if hi.ServerName != m.hostname {
+-		return nil, fmt.Errorf("cert mismatch with hostname: %q", hi.ServerName)
+-	}
+-
+ 	// Return a shallow copy of the cert so the caller can append to its
+ 	// Certificate field.
+ 	certCopy := new(tls.Certificate)
