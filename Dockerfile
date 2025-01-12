@@ -1,6 +1,6 @@
 FROM alpine/curl AS pre-build-env
 RUN echo "" > /build-info; \
-    if curl -s https://cf-ns.com/cdn-cgi/trace | grep -q 'loc=CN'; then \
+    if curl -s https://www.cloudflare-cn.com/cdn-cgi/trace | grep -q 'loc=CN'; then \
         echo "build_loc=CN" >> /build-info; \
     fi
 
