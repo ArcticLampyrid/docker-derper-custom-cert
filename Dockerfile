@@ -15,7 +15,7 @@ WORKDIR /go/src
 RUN apk add --no-cache git patch
 ARG VERSION_BRANCH=v1.70.0
 RUN if cat /build-info | grep -q 'build_loc=CN'; then \
-        git clone https://mirror.ghproxy.com/https://github.com/tailscale/tailscale.git --branch=$VERSION_BRANCH --depth=1; \
+        git clone https://ghfast.top/https://github.com/tailscale/tailscale.git --branch=$VERSION_BRANCH --depth=1; \
     else \
         git clone https://github.com/tailscale/tailscale.git --branch=$VERSION_BRANCH --depth=1; \
     fi;
